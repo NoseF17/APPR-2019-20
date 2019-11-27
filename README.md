@@ -1,4 +1,4 @@
-# Analiza rodnosti in umrljivosti
+# Analiza socioekonomskih značilnosti prebivalstva
 
 Repozitorij z gradivi pri predmetu APPR v študijskem letu 2019/20
 
