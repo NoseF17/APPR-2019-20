@@ -1,4 +1,4 @@
-# Analiza socioekonomskih značilnosti prebivalstva
+# Analiza tedenskih delovnih ur v EU
 
 Repozitorij z gradivi pri predmetu APPR v študijskem letu 2019/20
 
@@ -7,8 +7,13 @@ Repozitorij z gradivi pri predmetu APPR v študijskem letu 2019/20
 
 ## Tematika
 
-Izbrali si boste temo, s katero se bo vaš projekt ukvarjal.
-Tukaj boste napisali, kje ste dobili podatke, ter kakšen je vaš cilj.
+Analiziral bom število delovnih ur na teden po EU in jih primerjal po državah, evropsko povprečje pa bom tudi primerjal s Slovenijo. Primerjal jih bom tudi po spolu, ter si ogledal kako se je povprečna količina delovnih ur spreminjala v zadnjih 30 letih. Skušal bom ugotoviti, kako je razvitost države povezana s povprečjem delovnih ur. Hkrati pa me bo zanimalo, v katerih panogah ljudje povprečno delajo največ in v katerih najmanj.
+
+Podatke bom črpal iz Eurostata. Tabele ki jih bom uporabljal:
+- Average number of usual weekly hours of work in main job, by sex, professional status, full-time/part-time and economic activityfrom 2008 onwards, NACE Rev. 2) - hours (lfsa_ewhun2)
+- Average number of usual weekly hours of work in main job, by sex, professional status, full-time/part-time and economic activity (1983-2008, NACE Rev. 1.1) - hours (lfsa_ewhuna)
+- Real GDP per capita
+- Gross domestic product at market prices
 
 ## Program
 
