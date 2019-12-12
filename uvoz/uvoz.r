@@ -1,6 +1,16 @@
 # 2. faza: Uvoz podatkov
-
+library(readr)
 sl <- locale("sl", decimal_mark=",", grouping_mark=".")
+#library(eurostat)
+
+
+
+tabela111 <- read_csv('podatki/lfsa_ewhun2_1_Data.csv', locale= locale(encoding = 'CP1250'))
+tabela1(delovne_ure_moski_zenske) <- read_csv('podatki/tabela_moski_zenske_2008+.csv', locale= locale(encoding = 'CP1250'))
+tabela2zenske <- read_csv('podatki/tabela_zenske_2008+.csv', locale= locale(encoding = 'CP1250'))
+tabela3panoge <- read_csv('podatki/tabela_po_panogah_2008+.csv', locale= locale(encoding = 'CP1250'))
+tabela4gdp <- read_csv('podatki/tabela_GDP_per_capita_2008+.csv', locale= locale(encoding = 'CP1250'))
+
 
 # Funkcija, ki uvozi občine iz Wikipedije
 uvozi.obcine <- function() {
@@ -28,6 +38,8 @@ uvozi.obcine <- function() {
   }
   return(tabela)
 }
+
+
 
 # Funkcija, ki uvozi podatke iz datoteke druzine.csv
 uvozi.druzine <- function(obcine) {
