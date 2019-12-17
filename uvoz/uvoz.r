@@ -1,15 +1,23 @@
 # 2. faza: Uvoz podatkov
 library(readr)
-sl <- locale("sl", decimal_mark=",", grouping_mark=".")
+library(tidyr)
+library(dplyr)
 #library(eurostat)
 
+sl <- locale("sl", decimal_mark=",", grouping_mark=".")
 
 
-tabela111 <- read_csv('podatki/lfsa_ewhun2_1_Data.csv', locale= locale(encoding = 'CP1250'))
-tabela1(delovne_ure_moski_zenske) <- read_csv('podatki/tabela_moski_zenske_2008+.csv', locale= locale(encoding = 'CP1250'))
-tabela2zenske <- read_csv('podatki/tabela_zenske_2008+.csv', locale= locale(encoding = 'CP1250'))
-tabela3panoge <- read_csv('podatki/tabela_po_panogah_2008+.csv', locale= locale(encoding = 'CP1250'))
-tabela4gdp <- read_csv('podatki/tabela_GDP_per_capita_2008+.csv', locale= locale(encoding = 'CP1250'))
+
+
+#tabela111 <- read_csv('podatki/lfsa_ewhun2_1_Data.csv', locale= locale(encoding = 'CP1250'))
+
+tabela1_delovne_ure_moski_zenske <- read_csv('podatki/tabela_moski_zenske_2008+.csv', na=' ', skip=1, col_names = c('Leto','Država','Spol','Zaposlenost','izbriši1','izbriši2','izbriši3', 'Št. delovnih ur', 'izbriši4'), locale= locale(encoding = 'CP1250')) %>%
+  select(-'izbriši1',-'izbriši2',-'izbriši3',-'izbriši4')
+tabela2panoge <- read_csv('podatki/tabela_po_panogah_2008+.csv', na=' ', skip=1, col_names = c('Leto','Država','Spol','Zaposlenost', 'Status', 'Panoga', 'Enota', 'Št. delovnih ur', 'izbriši1'), locale= locale(encoding = 'CP1250')) %>%
+  select(-'Spol',-'Status',-'izbriši1',-'Enota')
+tabela3gdp <- read_csv('podatki/tabela_GDP_per_capita_2008+.csv', na=' ', skip=1, col_names = c('Leto', 'Država', 'Enota','NA_ITEM', 'Vrednost', 'izbriši1'), locale= locale(encoding = 'CP1250')) %>%
+  select(-'izbriši1')
+
 
 
 # Funkcija, ki uvozi občine iz Wikipedije
