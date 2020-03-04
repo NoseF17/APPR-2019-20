@@ -11,27 +11,36 @@ sl <- locale("sl", decimal_mark=",", grouping_mark=".")
 
 #tabela111 <- read_csv('podatki/lfsa_ewhun2_1_Data.csv', locale= locale(encoding = 'CP1250'))
 
-tabela1_delovne_ure_moski_zenske <- read_csv('podatki/tabela_moski_zenske_2008+.csv', na=' ', skip=1, col_names = c('Leto','Država','Spol','Zaposlenost','izbriši1','izbriši2','izbriši3', 'Št. delovnih ur', 'izbriši4'), locale= locale(encoding = 'CP1250')) %>%
+tabela1_delovne_ure_moski_zenske <- read_csv('podatki/tabela_moski_zenske_2008+.csv', na=' ', skip=1, col_names = c('Leto','Drzava','Spol','Zaposlenost','izbriši1','izbriši2','izbriši3', 'St. delovnih ur', 'izbriši4'), locale= locale(encoding = 'CP1250')) %>%
   select(-'izbriši1',-'izbriši2',-'izbriši3',-'izbriši4')
-tabela2panoge <- read_csv('podatki/tabela_po_panogah_2008+.csv', na=' ', skip=1, col_names = c('Leto','Država','Spol','Zaposlenost', 'Status', 'Panoga', 'Enota', 'Št. delovnih ur', 'izbriši1'), locale= locale(encoding = 'CP1250')) %>%
+tabela2panoge <- read_csv('podatki/tabela_po_panogah_2008+.csv', na=' ', skip=1, col_names = c('Leto','Drzava','Spol','Zaposlenost', 'Status', 'Panoga', 'Enota', 'St. delovnih ur', 'izbriši1'), locale= locale(encoding = 'CP1250')) %>%
   select(-'Spol',-'Status',-'izbriši1',-'Enota')
-tabela3gdp <- read_csv('podatki/tabela_GDP_per_capita_2008+.csv', na=' ', skip=1, col_names = c('Leto', 'Država', 'Enota','NA_ITEM', 'Vrednost', 'izbriši1'), locale= locale(encoding = 'CP1250')) %>%
+tabela3gdp <- read_csv('podatki/tabela_GDP_per_capita_2008+.csv', na=' ', skip=1, col_names = c('Leto', 'Drzava', 'Enota','NA_ITEM', 'Vrednost', 'izbriši1'), locale= locale(encoding = 'CP1250')) %>%
   select(-'izbriši1')
 
-tabela4_delovne_ure_moski_zenske <- read_csv('podatki/tabela_moski_zenske_2008+.csv', na=' ', skip=1, col_names = c('Leto','Država','Spol','Zaposlenost','izbriši1','izbriši2','izbriši3', 'SteviloDelovnihUr', 'izbriši4'), locale= locale(encoding = 'CP1250')) %>%
+tabela4_delovne_ure_moski_zenske <- read_csv('podatki/tabela_moski_zenske_2008+.csv', na=' ', skip=1, col_names = c('Leto','Drzava','Spol','Zaposlenost','izbriši1','izbriši2','izbriši3', 'SteviloDelovnihUr', 'izbriši4'), locale= locale(encoding = 'CP1250')) %>%
   select(-'izbriši1',-'izbriši2',-'izbriši3',-'izbriši4')
 
 
 #Zanima me samo Totalni delovni čas - total
 A1 <- tabela4_delovne_ure_moski_zenske %>% filter(Zaposlenost=="Total") %>% 
-  select(Leto, Država, Spol, SteviloDelovnihUr)
+  select(Leto, Drzava, Spol, SteviloDelovnihUr)
 
 #Slovenija v primerjavi z EU28 po letih
-A2 <- A1 %>% filter(Država == "Slovenia" & "	European Union - 28 countries") %>% 
-  select(Leto, Država, Spol, SteviloDelovnihUr)
+A2 <- A1 %>% filter(Drzava == "Slovenia", Spol == "Total") %>% 
+  select(Leto, Drzava, Spol, SteviloDelovnihUr)
+A3 <- A1 %>% filter(Drzava == "European Union - 28 countries", Spol == "Total") %>% 
+  select(Leto, Drzava, Spol, SteviloDelovnihUr)
 
-bbb <- tabela4_delovne_ure_moski_zenske %>% filter(Zaposlenost=="No response") %>% 
-  select(Država, Spol, SteviloDelovnihUr)
+#samomori.drzave <- A1 %>% group_by(Drzava, Leto) %>%
+#  summarise(vsota=sum(SteviloDelovnihUr, na.rm = TRUE))
+
+#samomori.vsi<- SAMOMORI %>% group_by(leto) %>% 
+#summarise(vsota=sum(vrednost, na.rm=TRUE))
+
+#samomori.drzave <- SAMOMORI %>% group_by(država, leto) %>% 
+#summarise(vsota=sum(vrednost, na.rm = TRUE))
+
 #  imena %>% filter(leto == 2013, spol == "zenske", stevilo <= 5) %>%
 #  select(ime, stevilo)
 # Funkcija, ki uvozi občine iz Wikipedije
