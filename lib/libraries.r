@@ -13,6 +13,7 @@ library("readxl")
 library("openxlsx")
 library(tmap)
 library(ggplot2)
+library(scales)
 
 
 # Uvozimo funkcije za pobiranje in uvoz zemljevida.
