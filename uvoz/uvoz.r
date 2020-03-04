@@ -18,8 +18,22 @@ tabela2panoge <- read_csv('podatki/tabela_po_panogah_2008+.csv', na=' ', skip=1,
 tabela3gdp <- read_csv('podatki/tabela_GDP_per_capita_2008+.csv', na=' ', skip=1, col_names = c('Leto', 'Država', 'Enota','NA_ITEM', 'Vrednost', 'izbriši1'), locale= locale(encoding = 'CP1250')) %>%
   select(-'izbriši1')
 
+tabela4_delovne_ure_moski_zenske <- read_csv('podatki/tabela_moski_zenske_2008+.csv', na=' ', skip=1, col_names = c('Leto','Država','Spol','Zaposlenost','izbriši1','izbriši2','izbriši3', 'SteviloDelovnihUr', 'izbriši4'), locale= locale(encoding = 'CP1250')) %>%
+  select(-'izbriši1',-'izbriši2',-'izbriši3',-'izbriši4')
 
 
+#Zanima me samo Totalni delovni čas - total
+A1 <- tabela4_delovne_ure_moski_zenske %>% filter(Zaposlenost=="Total") %>% 
+  select(Leto, Država, Spol, SteviloDelovnihUr)
+
+#Slovenija v primerjavi z EU28 po letih
+A2 <- A1 %>% filter(Država == "Slovenia" & "	European Union - 28 countries") %>% 
+  select(Leto, Država, Spol, SteviloDelovnihUr)
+
+bbb <- tabela4_delovne_ure_moski_zenske %>% filter(Zaposlenost=="No response") %>% 
+  select(Država, Spol, SteviloDelovnihUr)
+#  imena %>% filter(leto == 2013, spol == "zenske", stevilo <= 5) %>%
+#  select(ime, stevilo)
 # Funkcija, ki uvozi občine iz Wikipedije
 uvozi.obcine <- function() {
   link <- "http://sl.wikipedia.org/wiki/Seznam_ob%C4%8Din_v_Sloveniji"
