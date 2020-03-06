@@ -19,12 +19,15 @@ g3drzave <- ggplot(data = A1, aes(x=Leto, y=SteviloDelovnihUr)) +
 
 
 
-#######  SKUPNO IZRISAVANJE  #########
+##########  SKUPNO IZRISAVANJE  ############
+
+#1. Slo in EU ločeno po spolih, izrisano v točkah.
 graf <- ggplot(data = A1 %>% filter(Drzava %in% c("Slovenia", "European Union - 28 countries")),
              aes(x=Leto, y=SteviloDelovnihUr, color = Spol, shape = Drzava)) + 
   geom_point() + ggtitle("Število delovnih ur po letih") + 
   theme(panel.background=element_rect(fill="grey"))
 
+#2. Slo in EU total, izrisano s črto.
 graf2 <- ggplot(data = A1 %>% filter(Drzava %in% c("Slovenia", "European Union - 28 countries"), Spol %in% "Total"),
                aes(x=Leto, y=SteviloDelovnihUr, color = Drzava)) + 
   geom_line() + ggtitle("Število delovnih ur po letih") + 
