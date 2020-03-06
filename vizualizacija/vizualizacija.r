@@ -1,5 +1,10 @@
 # 3. faza: Vizualizacija podatkov
 
+A3$SteviloDelovnihUr <- parse_double(A3$SteviloDelovnihUr)
+A2$SteviloDelovnihUr <- parse_double(A2$SteviloDelovnihUr)
+A1$SteviloDelovnihUr <- parse_double(A1$SteviloDelovnihUr)
+
+
 g1slo <- ggplot(data = A2, aes(x=Leto, y=SteviloDelovnihUr)) + 
   geom_line() + ggtitle("Število delovnih ur po letih") +
   theme(panel.background=element_rect(fill="grey"))
