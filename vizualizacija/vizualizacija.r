@@ -37,6 +37,7 @@ graf2 <- ggplot(data = A1 %>% filter(Drzava %in% c("Slovenia", "European Union -
 
 
 
+
 #kopirano
 #g <- ggplot() + aes(x=Leto, y=SteviloDelovnihUr, color=tip) + facet_grid(tip ~ ., scales="free_y") +
 #  geom_line(data= A1 %>% filter(Drzava == "Slovenia")) +
