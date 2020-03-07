@@ -5,22 +5,22 @@
 #A1$SteviloDelovnihUr <- parse_double(A1$SteviloDelovnihUr)
 
 
-g1slo <- ggplot(data = A2, aes(x=Leto, y=SteviloDelovnihUr)) + 
+g_slo <- ggplot(data = A2, aes(x=Leto, y=SteviloDelovnihUr)) + 
   geom_line() + ggtitle("Število delovnih ur po letih") +
   theme(panel.background=element_rect(fill="grey"))
 
-g2eu <- ggplot(data = A3, aes(x=Leto, y=SteviloDelovnihUr)) + 
+g_eu <- ggplot(data = A3, aes(x=Leto, y=SteviloDelovnihUr)) + 
   geom_line() + ggtitle("Število delovnih ur po letih") + 
   theme(panel.background=element_rect(fill="grey"))
 
-g3drzave <- ggplot(data = A1, aes(x=Leto, y=SteviloDelovnihUr)) + 
+g_drzave <- ggplot(data = A1, aes(x=Leto, y=SteviloDelovnihUr)) + 
   geom_line() + ggtitle("Število delovnih ur po letih") + 
   theme(panel.background=element_rect(fill="grey"))
 
 
 ##########  SKUPNO IZRISAVANJE  ############
 #1. Slo in EU ločeno po spolih, izrisano v točkah.
-graf <- ggplot(data = A1 %>% filter(Drzava %in% c("Slovenia", "European Union - 28 countries")),
+graf1 <- ggplot(data = A1 %>% filter(Drzava %in% c("Slovenia", "European Union - 28 countries")),
              aes(x=Leto, y=SteviloDelovnihUr, color = Spol, shape = Drzava)) + 
   geom_point() + ggtitle("Število delovnih ur po letih") + 
   theme(panel.background=element_rect(fill="grey"))
@@ -56,36 +56,14 @@ grafek2 <- tab2 %>%
 
 
 ###################### ZEMLJEVIDI #####################
-data("World")
-svet<- tm_shape(World) +tm_polygons(border.col = "black")
+#data("World")
+#svet<- tm_shape(World) +tm_polygons(border.col = "black")
 
-evropskedrzave <- World%>%filter(continent == "Europe")
-names(evropskedrzave)
-z1 <- tm_shape(evropskedrzave) + tm_polygons(border.col = "black") + tm_legend(show=TRUE)
+#evropskedrzave <- World%>%filter(continent == "Europe")
+#names(evropskedrzave)
+#z1 <- tm_shape(evropskedrzave) + tm_polygons(border.col = "black") + tm_legend(show=TRUE)
 
-
-cluster_evropa <- function(){
-  evropa1 <- World %>% filter (continent == 'Europe')
-  zadovoljstvo <- uvozi.rating()
-  brezposelnost <- uvozi.zaposlenost()
-  bdp <- uvozi.BDP() %>% filter(leto == 2018) %>% select('Drzava', 'BDP per capita')
-  evropa2 <- inner_join(x = evropa1, y = zadovoljstvo, by = c('sovereignt'='Drzava'))
-  evropa3 <- inner_join(x = evropa2, y = brezposelnost, by = c('sovereignt'='name'))
-  evropa4 <- inner_join(x = evropa3, y = bdp, by = c('sovereignt'='Drzava'))
-  podatki_cluster <- evropa4 %>% filter (leto == 2018) %>% select('sovereignt', 'pop_est','BDP per capita', 'Ocena','Brezposelnost')
-  podatki_cluster2 <- podatki_cluster
-  podatki_cluster$geometry = NULL
-  cluster <- podatki_cluster %>% select(-sovereignt) %>% scale()
-  rownames(cluster) <- podatki_cluster$sovereignt
-  k <- kmeans(cluster, 5, nstart=1000)
-  skupine <- data.frame(sovereignt=podatki_cluster2$sovereignt, skupina=factor(k$cluster))
-  podatki_za_risat <- merge(podatki_cluster2, skupine, by ='sovereignt')
-  zemljevid <- tm_shape(podatki_za_risat) + tm_polygons('skupina')
-  zemljevid
-  tmap_mode('view')
-  return(zemljevid)
-}
-
+#1. BDP 2018
 zemljevid_evrope_BDP <- function(){
   evropa <- World %>% filter (continent == 'Europe')
   BDP <- A4
@@ -95,7 +73,29 @@ zemljevid_evrope_BDP <- function(){
   tmap_mode('view')
   return(evropa)
 }
-#zemljevid_evrope_BDP()
+
+#2. Delovne ure 2018
+zemljevid_evrope_delovne_ure_2018 <- function(){
+  evropa <- World %>% filter (continent == 'Europe')
+  DelovneUre <- A1
+  DeloneUre <- DelovneUre %>% filter (Leto == 2018, Spol == "Total") %>% select('Drzava', 'SteviloDelovnihUr')
+  podatki <- merge(y = DelovneUre,x = evropa, by.x='name', by.y = 'Drzava')
+  evropa <- tm_shape(podatki) + tm_polygons('SteviloDelovnihUr')
+  tmap_mode('view')
+  return(evropa)
+}
+
+zemljevid_evrope_delovne_ure_2009 <- function(){
+  evropa <- World %>% filter (continent == 'Europe')
+  DelovneUre <- A1
+  DeloneUre <- DelovneUre %>% filter (Leto == 2009, Spol == "Total") %>% select('Drzava', 'SteviloDelovnihUr')
+  podatki <- merge(y = DelovneUre,x = evropa, by.x='name', by.y = 'Drzava')
+  evropa <- tm_shape(podatki) + tm_polygons('SteviloDelovnihUr')
+  tmap_mode('view')
+  return(evropa)
+}
+
+
 
 
 # Uvozimo zemljevid.

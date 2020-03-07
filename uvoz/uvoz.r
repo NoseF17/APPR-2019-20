@@ -22,6 +22,7 @@ tabela5panoge <-read_csv('podatki/tabela_po_panogah_nova_2008+.csv', na=':', ski
 A1 <- tabela4_delovne_ure_moski_zenske %>% filter(Zaposlenost=="Total") %>% 
   select(Leto, Drzava, Spol, SteviloDelovnihUr)
 A1$Drzava[A1$Drzava == 'Germany (until 1990 former territory of the FRG)'] <- 'Germany'
+A1$Drzava[A1$Drzava == "Czechia"] <- "Czech Rep."
 
 #Slovenija v primerjavi z EU28 po letih
 A2 <- A1 %>% filter(Drzava == "Slovenia", Spol == "Total") %>% 
@@ -35,6 +36,7 @@ A4 <- tabela3gdp %>% filter(Enota =="Current prices, euro per capita",
                             NA_ITEM == "Gross domestic product at market prices") %>% 
   select(Leto, Drzava, Vrednost)
 A4$Drzava[A4$Drzava == 'Germany (until 1990 former territory of the FRG)'] <- 'Germany'
+A4$Drzava[A4$Drzava == "Czechia"] <- "Czech Rep."
 
 ########## PANOGE ##########
 A5 <- tabela5panoge %>% filter(Spol == "Total") %>% 
