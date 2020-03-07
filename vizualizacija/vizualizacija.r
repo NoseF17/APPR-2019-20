@@ -18,9 +18,7 @@ g3drzave <- ggplot(data = A1, aes(x=Leto, y=SteviloDelovnihUr)) +
   theme(panel.background=element_rect(fill="grey"))
 
 
-
 ##########  SKUPNO IZRISAVANJE  ############
-
 #1. Slo in EU ločeno po spolih, izrisano v točkah.
 graf <- ggplot(data = A1 %>% filter(Drzava %in% c("Slovenia", "European Union - 28 countries")),
              aes(x=Leto, y=SteviloDelovnihUr, color = Spol, shape = Drzava)) + 
@@ -33,19 +31,28 @@ graf2 <- ggplot(data = A1 %>% filter(Drzava %in% c("Slovenia", "European Union -
   geom_line() + ggtitle("Število delovnih ur po letih") + 
   theme(panel.background=element_rect(fill="grey"))
 
+########## PRIMERJAVA BDP IN DELOVNIH UR ZA SLO ##########
+colnames(A4)[3] <- "BDP"
+df <- left_join(A1 %>% filter(Drzava == "Slovenia" & Spol == "Total"), 
+                A4 %>% filter(Drzava == "Slovenia"))[,-c(2,3)]
+df1 <- gather(df, "tip", "vrednost", -Leto)
+
+grafek <- df1 %>%
+  ggplot(aes(x = Leto, y = vrednost, color = tip)) +
+  geom_line() +
+  facet_grid(tip ~ ., scales = "free_y")
 
 
+########## PRIMERJAVA BDP IN DELOVNIH UR ZA EU ##########
+colnames(A4)[3] <- "BDP"
+tab1 <- left_join(A1 %>% filter(Drzava == "European Union - 28 countries" & Spol == "Total"), 
+                A4 %>% filter(Drzava == "European Union - 28 countries"))[,-c(2,3)]
+tab2 <- gather(tab1, "tip", "vrednost", -Leto)
 
-
-
-#kopirano
-#g <- ggplot() + aes(x=Leto, y=SteviloDelovnihUr, color=tip) + facet_grid(tip ~ ., scales="free_y") +
-#  geom_line(data= A1 %>% filter(Drzava == "Slovenia")) +
-#  geom_line(data=A1 %>% filter(Drzava == "European Union - 28 countries")) + 
-#  scale_x_continuous(breaks=seq(2008, 2018, 2)) +
-#  scale_y_continuous(labels=comma_format(big.mark="")) +
-#  guides(color=FALSE) + ggtitle("Število prostih in zasedenih delovnih mest ")
-
+grafek2 <- tab2 %>%
+  ggplot(aes(x = Leto, y = vrednost, color = tip)) +
+  geom_line() +
+  facet_grid(tip ~ ., scales = "free_y")
 
 
 

@@ -39,7 +39,13 @@ A4$Drzava[A4$Drzava == 'Germany (until 1990 former territory of the FRG)'] <- 'G
 ########## PANOGE ##########
 A5 <- tabela5panoge %>% filter(Spol == "Total") %>% 
   select(Leto, Drzava, -Spol, Panoga, SteviloDelovnihUr)
+A5$Drzava[A5$Drzava == 'Germany (until 1990 former territory of the FRG)'] <- 'Germany'
+A5$Drzava[A5$Drzava == 'European Union - 28 countries (2013-2020)'] <- 'European Union - 28 countries'
 
+##############################################################################################
+### PANOGE ZA DOLOČENO DRŽAVO ###
+#1. EU
+A6 <- A5 %>% filter(Drzava == "European Union - 28 countries")
 
 
 #uvozi.BDP <- function() {
