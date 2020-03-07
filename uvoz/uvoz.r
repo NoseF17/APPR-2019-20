@@ -45,7 +45,44 @@ A5$Drzava[A5$Drzava == 'European Union - 28 countries (2013-2020)'] <- 'European
 ##############################################################################################
 ### PANOGE ZA DOLOČENO DRŽAVO ###
 #1. EU
-A6 <- A5 %>% filter(Drzava == "European Union - 28 countries")
+EUTOP5 <- A5 %>% filter(Drzava == "European Union - 28 countries", Leto == "2018") %>%
+  group_by(Panoga) %>% summarise(SteviloDelovnihUr) %>% arrange(desc(SteviloDelovnihUr)) %>%
+  drop_na() %>% head(5)
+EULOW5 <- A5 %>% filter(Drzava == "European Union - 28 countries", Leto == "2018") %>%
+  group_by(Panoga) %>% summarise(SteviloDelovnihUr) %>% arrange(desc(SteviloDelovnihUr)) %>%
+  drop_na() %>% tail(5)
+
+#2. SLOVENIJA
+SLOTOP5 <- A5 %>% filter(Drzava == "Slovenia", Leto == "2018") %>%
+  group_by(Panoga) %>% summarise(SteviloDelovnihUr) %>% arrange(desc(SteviloDelovnihUr)) %>%
+  drop_na() %>% head(5)
+SLOLOW5 <- A5 %>% filter(Drzava == "Slovenia", Leto == "2018") %>%
+  group_by(Panoga) %>% summarise(SteviloDelovnihUr) %>% arrange(desc(SteviloDelovnihUr)) %>%
+  drop_na() %>% tail(5)
+
+#3. NEMČIJA
+GERTOP5 <- A5 %>% filter(Drzava == "Germany", Leto == "2018") %>%
+  group_by(Panoga) %>% summarise(SteviloDelovnihUr) %>% arrange(desc(SteviloDelovnihUr)) %>%
+  drop_na() %>% head(5) 
+
+#4. HRVAŠKA
+CROTOP5 <- A5 %>% filter(Drzava == "Croatia", Leto == "2018") %>%
+  group_by(Panoga) %>% summarise(SteviloDelovnihUr) %>% arrange(desc(SteviloDelovnihUr)) %>%
+  drop_na() %>% head(5)
+
+CROLOW5 <- A5 %>% filter(Drzava == "Croatia", Leto == "2018") %>%
+  group_by(Panoga) %>% summarise(SteviloDelovnihUr) %>% arrange(desc(SteviloDelovnihUr))%>% 
+  drop_na() %>% tail(5) 
+
+#5. GRČIJA
+GRETOP5 <- A5 %>% filter(Drzava == "Greece", Leto == "2018") %>%
+  group_by(Panoga) %>% summarise(SteviloDelovnihUr) %>% arrange(desc(SteviloDelovnihUr)) %>%
+  drop_na() %>% head(5)
+
+
+#imena %>% filter(leto == 2019) %>% group_by(ime) %>%
+#  summarise(stevilo=sum(stevilo)) %>% arrange(desc(stevilo)) %>%
+#  head(20)
 
 
 #uvozi.BDP <- function() {
