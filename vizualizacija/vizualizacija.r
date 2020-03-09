@@ -57,8 +57,10 @@ grafek2 <- tab2 %>%
 ########## PANOGE ########## primerju bom prve tri in zadne tri od SLO z EU, kot zanimivost se hrvaski/grski turizem z EU ali pa nemsko proizvodnjo z EU
 #tab5 <- A1 %>% filter(Drzava=="Slovenia") %>% 
 #  select(Leto, Drzava, Spol, SteviloDelovnihUr)
-panoge <- ggplot(SLOTOP5, aes(x=Panoga, y=SteviloDelovnihUr))#, fill=spol)) + 
-  geom_bar() + facet_grid(tip~) +ggtitle("SLO panoge") + 
+
+
+panoge <- ggplot(SLOTOP5, aes(x=Panoga, y=SteviloDelovnihUr))
+  geom_bar() + facet_grid(~Panoga) +ggtitle("SLO panoge") + 
   xlab("") + ylab("SteviloDelovnihUr") +
   theme(axis.text.x = element_text(angle = 90, hjust = 1))
 
