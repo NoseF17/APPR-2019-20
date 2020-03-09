@@ -55,20 +55,25 @@ grafek2 <- tab2 %>%
   facet_grid(tip ~ ., scales = "free_y")
 
 ########## PANOGE ########## primerju bom prve tri in zadne tri od SLO z EU, kot zanimivost se hrvaski/grski turizem z EU ali pa nemsko proizvodnjo z EU
-#tab5 <- A1 %>% filter(Drzava=="Slovenia") %>% 
-#  select(Leto, Drzava, Spol, SteviloDelovnihUr)
+#1. samo Slovenija
+panoge <- ggplot(SLOTOP5, aes(x=Panoga, y=SteviloDelovnihUr)) + 
+  geom_bar(stat='identity', position='dodge') + ggtitle("SLO panoge") + 
+  xlab("") + ylab("SteviloDelovnihUr") 
 
+#2. SLO + EU
+eu <- (A5 %>% filter(Drzava == "European Union - 28 countries", Leto == "2018"))[,-c(1,2)]
+colnames(eu) <- c("Panoga", "EU")
+skupna <- left_join(SLOTOP5, eu, by = "Panoga")
+skupna1 <- left_join(SLOTOP5, eu, by = "Panoga")
+colnames(skupna)[2] <- "Slovenija"
+skupna <- gather(skupna, key = "drzava", value = "ure", -Panoga)
+grafpanoge <- ggplot(skupna, aes(x=Panoga, y=ure, fill=drzava)) +
+  geom_bar(stat='identity', position='dodge') #+ theme(axis.text.x = element_text(angle = 45, hjust = 1))
 
-panoge <- ggplot(SLOTOP5, aes(x=Panoga, y=SteviloDelovnihUr))
-  geom_bar() + facet_grid(~Panoga) +ggtitle("SLO panoge") + 
-  xlab("") + ylab("SteviloDelovnihUr") +
-  theme(axis.text.x = element_text(angle = 90, hjust = 1))
-
-
-rojstva_smrti <- ggplot(tabela_rojeni_umrli, aes(x=stanje, y=stevilo, fill=spol)) + 
-  geom_bar(stat="identity") + facet_grid(~regija) +ggtitle("Rojstva in smrti") + 
-  xlab("") + ylab("število") +
-  theme(axis.text.x = element_text(angle = 90, hjust = 1))
+#rojstva_smrti <- ggplot(tabela_rojeni_umrli, aes(x=stanje, y=stevilo, fill=spol)) + 
+#  geom_bar(stat="identity") + facet_grid(~regija) +ggtitle("Rojstva in smrti") + 
+#  xlab("") + ylab("število") +
+#  theme(axis.text.x = element_text(angle = 90, hjust = 1))
 
 
 
