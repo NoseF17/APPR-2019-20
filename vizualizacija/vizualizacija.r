@@ -54,6 +54,21 @@ grafek2 <- tab2 %>%
   geom_line() +
   facet_grid(tip ~ ., scales = "free_y")
 
+########## PANOGE ########## primerju bom prve tri in zadne tri od SLO z EU, kot zanimivost se hrvaski/grski turizem z EU ali pa nemsko proizvodnjo z EU
+#tab5 <- A1 %>% filter(Drzava=="Slovenia") %>% 
+#  select(Leto, Drzava, Spol, SteviloDelovnihUr)
+panoge <- ggplot(SLOTOP5, aes(x=Panoga, y=SteviloDelovnihUr))#, fill=spol)) + 
+  geom_bar() + facet_grid(tip~) +ggtitle("SLO panoge") + 
+  xlab("") + ylab("SteviloDelovnihUr") +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1))
+
+
+rojstva_smrti <- ggplot(tabela_rojeni_umrli, aes(x=stanje, y=stevilo, fill=spol)) + 
+  geom_bar(stat="identity") + facet_grid(~regija) +ggtitle("Rojstva in smrti") + 
+  xlab("") + ylab("število") +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1))
+
+
 
 ###################### ZEMLJEVIDI #####################
 #data("World")

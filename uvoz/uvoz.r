@@ -24,6 +24,9 @@ A1 <- tabela4_delovne_ure_moski_zenske %>% filter(Zaposlenost=="Total") %>%
 A1$Drzava[A1$Drzava == 'Germany (until 1990 former territory of the FRG)'] <- 'Germany'
 A1$Drzava[A1$Drzava == "Czechia"] <- "Czech Rep."
 
+#A111 <- tabela1_delovne_ure_moski_zenske %>% group_by(Leto, Spol) %>% summarise(SteviloDelovnihUr)
+#A222 <- tabela1_delovne_ure_moski_zenske %>% group_by(Zaposlenost) %>% summarise(SteviloDelovnihUr)
+
 #Slovenija v primerjavi z EU28 po letih
 A2 <- A1 %>% filter(Drzava == "Slovenia", Spol == "Total") %>% 
   select(Leto, Drzava, Spol, SteviloDelovnihUr)
@@ -46,6 +49,7 @@ A5$Drzava[A5$Drzava == 'European Union - 28 countries (2013-2020)'] <- 'European
 
 ##############################################################################################
 ### PANOGE ZA DOLOČENO DRŽAVO ###
+# tabela_rojeni_umrli <- full_join(tabela_umrli, tabela_rojeni) ce bom zdruzil top3 s low3
 #1. EU
 EUTOP5 <- A5 %>% filter(Drzava == "European Union - 28 countries", Leto == "2018") %>%
   group_by(Panoga) %>% summarise(SteviloDelovnihUr) %>% arrange(desc(SteviloDelovnihUr)) %>%
