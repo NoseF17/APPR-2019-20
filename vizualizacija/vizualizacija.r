@@ -121,16 +121,19 @@ zemljevid_evrope_delovne_ure_2009 <- function(){
 razvrscanje <- function(){
   evropa1 <- World %>% filter (continent == 'Europe')
   names(evropa1)[3] <- 'Drzava'
-  evropa1$Drzava <- parse_character(evropa1$Drzava)
   delure <- A1 %>% filter(Leto == 2018, Spol == "Total") %>% 
     select(Drzava, SteviloDelovnihUr)
   bdp <- A4 %>% filter(Leto == 2018) %>% 
     select(Drzava, BDP)
   glavni1 <- inner_join(evropa1, delure, by = 'Drzava')
   glavni2 <- inner_join(glavni1, bdp, by = 'Drzava')
-  
-
-#  left_join(SLOTOP5, eu, by = "Panoga")
+  podatki_cluster <- glavni2 %>% select('Drzava', 'SteviloDelovnihUr','BDP', 'pop_est','well_being')
+  podatki.norm <- podatki_cluster %>% select(-Drzava) %>% scale()
+  rownames(podatki.norm) <- podatki_cluster$Drzava
+  k <- kmeans(podatk.norm, 5, nstart=1000)
+  skupine <- data.frame(Drzava=podatki_cluster$Drzava, skupina=factor(k$cluster))
+  slika <- tm_shape(merge(podatki_cluster, skupine, by="Drzava")) + tm_polygons("skupina")
+  return(slika)
 }
 # Uvozimo zemljevid.
 #zemljevid <- uvozi.zemljevid("http://baza.fmf.uni-lj.si/OB.zip", "OB",
