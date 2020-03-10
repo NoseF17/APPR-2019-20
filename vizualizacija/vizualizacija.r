@@ -117,9 +117,21 @@ zemljevid_evrope_delovne_ure_2009 <- function(){
   return(evropa)
 }
 
+########## RAZVRŠČANJE V SKUPINE ##########
+razvrscanje <- function(){
+  evropa1 <- World %>% filter (continent == 'Europe')
+  names(evropa1)[3] <- 'Drzava'
+  evropa1$Drzava <- parse_character(evropa1$Drzava)
+  delure <- A1 %>% filter(Leto == 2018, Spol == "Total") %>% 
+    select(Drzava, SteviloDelovnihUr)
+  bdp <- A4 %>% filter(Leto == 2018) %>% 
+    select(Drzava, BDP)
+  glavni1 <- inner_join(evropa1, delure, by = 'Drzava')
+  glavni2 <- inner_join(glavni1, bdp, by = 'Drzava')
+  
 
-
-
+#  left_join(SLOTOP5, eu, by = "Panoga")
+}
 # Uvozimo zemljevid.
 #zemljevid <- uvozi.zemljevid("http://baza.fmf.uni-lj.si/OB.zip", "OB",
 #                             pot.zemljevida="OB", encoding="Windows-1250")
