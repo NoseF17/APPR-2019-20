@@ -7,6 +7,7 @@ library(readr)
 library(dplyr)
 library(mosaic)
 library(farver)
+library(tmaptools)
 
 options(gsubfn.engine="R")
 library("readxl")

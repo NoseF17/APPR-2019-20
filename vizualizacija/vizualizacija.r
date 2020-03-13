@@ -78,7 +78,7 @@ grafpanoge <- ggplot(skupna, aes(x=Panoga, y=ure, fill=drzava)) +
 
 
 ###################### ZEMLJEVIDI #####################
-#data("World")
+data("World")
 #svet<- tm_shape(World) +tm_polygons(border.col = "black")
 
 #evropskedrzave <- World%>%filter(continent == "Europe")
@@ -118,6 +118,7 @@ zemljevid_evrope_delovne_ure_2009 <- function(){
 }
 
 ########## RAZVRŠČANJE V SKUPINE ##########
+#library(tmaptools)
 razvrscanje <- function(){
   evropa1 <- World %>% filter (continent == 'Europe')
   names(evropa1)[3] <- 'Drzava'
@@ -127,14 +128,43 @@ razvrscanje <- function(){
     select(Drzava, BDP)
   glavni1 <- inner_join(evropa1, delure, by = 'Drzava')
   glavni2 <- inner_join(glavni1, bdp, by = 'Drzava')
+  class(glavni2) <- "data.frame"
   podatki_cluster <- glavni2 %>% select('Drzava', 'SteviloDelovnihUr','BDP', 'pop_est','well_being')
   podatki.norm <- podatki_cluster %>% select(-Drzava) %>% scale()
   rownames(podatki.norm) <- podatki_cluster$Drzava
-  k <- kmeans(podatk.norm, 5, nstart=1000)
+  k <- kmeans(podatki.norm, 5, nstart=1000)
   skupine <- data.frame(Drzava=podatki_cluster$Drzava, skupina=factor(k$cluster))
-  slika <- tm_shape(merge(podatki_cluster, skupine, by="Drzava")) + tm_polygons("skupina")
+  #slika <- tm_shape(merge(evropa1, skupine, by="Drzava"), all.x=TRUE) + tm_polygons("skupina")
+  slika <- tm_shape(merge(evropa1, skupine, by="Drzava") %>% set_projection("latlong"),
+                    xlim=c(-25, 35), ylim=c(32, 72), all.x=TRUE) + tm_polygons("skupina")
+  #slika <- tm_shape(podatki %>% set_projection("latlong"),
+  #                  xlim=c(-25, 35), ylim=c(32, 72)) + tm_polygons("skupina")
   return(slika)
 }
+
+
+library(tmaptools)
+evropa1 <- World %>% filter (continent == 'Europe')
+names(evropa1)[3] <- 'Drzava'
+delure <- A1 %>% filter(Leto == 2018, Spol == "Total") %>% 
+    select(Drzava, SteviloDelovnihUr)
+bdp <- A4 %>% filter(Leto == 2018) %>%select(Drzava, BDP)
+glavni1 <- inner_join(evropa1, delure, by = 'Drzava')
+glavni2 <- inner_join(glavni1, bdp, by = 'Drzava')
+podatki_cluster <- glavni2 %>% select('Drzava', 'SteviloDelovnihUr','BDP', 'pop_est','well_being')
+st <- podatki_cluster$geometry
+podatki_cluster$geometry <- NULL
+podatki.norm <- podatki_cluster %>% select(-Drzava) %>% scale()
+rownames(podatki.norm) <- podatki_cluster$Drzava
+k <- kmeans(podatki.norm, 5, nstart=1000)
+skupine <- data.frame(Drzava=podatki_cluster$Drzava, skupina=factor(k$cluster))
+podatki_cluster <- cbind(podatki_cluster, st) 
+t <- merge(podatki_cluster, skupine, by="Drzava")
+t <- t[,c(7,6)]
+zemljevid <- tm_shape(t %>% set_projection("latlong"),
+                      
+                      xlim=c(-25, 35), ylim=c(32, 72)) + tm_polygons("skupina")
+
 # Uvozimo zemljevid.
 #zemljevid <- uvozi.zemljevid("http://baza.fmf.uni-lj.si/OB.zip", "OB",
 #                             pot.zemljevida="OB", encoding="Windows-1250")
