@@ -67,7 +67,7 @@ skupna <- left_join(SLOTOP5, eu, by = "Panoga")
 skupna1 <- left_join(SLOTOP5, eu, by = "Panoga")
 colnames(skupna)[2] <- "Slovenija"
 skupna <- gather(skupna, key = "drzava", value = "ure", -Panoga)
-grafpanoge <- ggplot(skupna, aes(x=Panoga, y=ure, fill=drzava)) +
+grafpanoge <- ggplot(skupna, aes(x=Panoga, y=ure, fill=drzava)) + coord_cartesian(ylim = c(37.5, 42.5)) +
   geom_bar(stat='identity', position='dodge') #+ theme(axis.text.x = element_text(angle = 45, hjust = 1))
 
 #rojstva_smrti <- ggplot(tabela_rojeni_umrli, aes(x=stanje, y=stevilo, fill=spol)) + 
@@ -80,7 +80,6 @@ grafpanoge <- ggplot(skupna, aes(x=Panoga, y=ure, fill=drzava)) +
 ###################### ZEMLJEVIDI #####################
 data("World")
 #svet<- tm_shape(World) +tm_polygons(border.col = "black")
-
 #evropskedrzave <- World%>%filter(continent == "Europe")
 #names(evropskedrzave)
 #z1 <- tm_shape(evropskedrzave) + tm_polygons(border.col = "black") + tm_legend(show=TRUE)
@@ -124,6 +123,7 @@ razvrscanje <- function(){
   names(evropa1)[3] <- 'Drzava'
   delure <- A1 %>% filter(Leto == 2018, Spol == "Total") %>% 
     select(Drzava, SteviloDelovnihUr)
+  delure$Drzava[delure$Drzava == "Czech Rep."] <- "Czech Republic" # ZAKAJ NE SPREMENI IMENA
   bdp <- A4 %>% filter(Leto == 2018) %>% 
     select(Drzava, BDP)
   glavni1 <- inner_join(evropa1, delure, by = 'Drzava')
@@ -137,33 +137,30 @@ razvrscanje <- function(){
   #slika <- tm_shape(merge(evropa1, skupine, by="Drzava"), all.x=TRUE) + tm_polygons("skupina")
   slika <- tm_shape(merge(evropa1, skupine, by="Drzava") %>% set_projection("latlong"),
                     xlim=c(-25, 35), ylim=c(32, 72), all.x=TRUE) + tm_polygons("skupina")
-  #slika <- tm_shape(podatki %>% set_projection("latlong"),
-  #                  xlim=c(-25, 35), ylim=c(32, 72)) + tm_polygons("skupina")
   return(slika)
 }
 
 
-library(tmaptools)
-evropa1 <- World %>% filter (continent == 'Europe')
-names(evropa1)[3] <- 'Drzava'
-delure <- A1 %>% filter(Leto == 2018, Spol == "Total") %>% 
-    select(Drzava, SteviloDelovnihUr)
-bdp <- A4 %>% filter(Leto == 2018) %>%select(Drzava, BDP)
-glavni1 <- inner_join(evropa1, delure, by = 'Drzava')
-glavni2 <- inner_join(glavni1, bdp, by = 'Drzava')
-podatki_cluster <- glavni2 %>% select('Drzava', 'SteviloDelovnihUr','BDP', 'pop_est','well_being')
-st <- podatki_cluster$geometry
-podatki_cluster$geometry <- NULL
-podatki.norm <- podatki_cluster %>% select(-Drzava) %>% scale()
-rownames(podatki.norm) <- podatki_cluster$Drzava
-k <- kmeans(podatki.norm, 5, nstart=1000)
-skupine <- data.frame(Drzava=podatki_cluster$Drzava, skupina=factor(k$cluster))
-podatki_cluster <- cbind(podatki_cluster, st) 
-t <- merge(podatki_cluster, skupine, by="Drzava")
-t <- t[,c(7,6)]
-zemljevid <- tm_shape(t %>% set_projection("latlong"),
-                      
-                      xlim=c(-25, 35), ylim=c(32, 72)) + tm_polygons("skupina")
+#library(tmaptools)
+#evropa1 <- World %>% filter (continent == 'Europe')
+#names(evropa1)[3] <- 'Drzava'
+#delure <- A1 %>% filter(Leto == 2018, Spol == "Total") %>% 
+#    select(Drzava, SteviloDelovnihUr)
+#bdp <- A4 %>% filter(Leto == 2018) %>%select(Drzava, BDP)
+#glavni1 <- inner_join(evropa1, delure, by = 'Drzava')
+#glavni2 <- inner_join(glavni1, bdp, by = 'Drzava')
+#podatki_cluster <- glavni2 %>% select('Drzava', 'SteviloDelovnihUr','BDP', 'pop_est','well_being')
+#st <- podatki_cluster$geometry
+#podatki_cluster$geometry <- NULL
+#podatki.norm <- podatki_cluster %>% select(-Drzava) %>% scale()
+#rownames(podatki.norm) <- podatki_cluster$Drzava
+#k <- kmeans(podatki.norm, 5, nstart=1000)
+#skupine <- data.frame(Drzava=podatki_cluster$Drzava, skupina=factor(k$cluster))
+#podatki_cluster <- cbind(podatki_cluster, st) 
+#t <- merge(podatki_cluster, skupine, by="Drzava")
+#t <- t[,c(7,6)]
+#zemljevid <- tm_shape(t %>% set_projection("latlong"),
+#                      xlim=c(-25, 35), ylim=c(32, 72)) + tm_polygons("skupina")
 
 # Uvozimo zemljevid.
 #zemljevid <- uvozi.zemljevid("http://baza.fmf.uni-lj.si/OB.zip", "OB",
