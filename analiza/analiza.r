@@ -19,7 +19,7 @@ razvrscanje <- function(){
   delure <- A1 %>% filter(Leto == 2018, Spol == "Total") %>% 
     select(Drzava, SteviloDelovnihUr)
   delure$Drzava[delure$Drzava == "Czech Rep."] <- "Czech Republic" # ZAKAJ NE SPREMENI IMENA
-  bdp <- A4 %>% filter(Leto == 2018) %>% 
+  bdp <- tabela2gdp %>% filter(Leto == 2018) %>% 
     select(Drzava, BDP)
   glavni1 <- inner_join(evropa1, delure, by = 'Drzava')
   glavni2 <- inner_join(glavni1, bdp, by = 'Drzava')

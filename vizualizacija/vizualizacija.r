@@ -32,9 +32,9 @@ graf2 <- ggplot(data = A1 %>% filter(Drzava %in% c("Slovenia", "European Union -
   theme(panel.background=element_rect(fill="grey"))
 
 ########## PRIMERJAVA BDP IN DELOVNIH UR ZA SLO ##########
-colnames(A4)[3] <- "BDP"
+colnames(tabela2gdp)[3] <- "BDP"
 df <- left_join(A1 %>% filter(Drzava == "Slovenia" & Spol == "Total"), 
-                A4 %>% filter(Drzava == "Slovenia"))[,-c(2,3)]
+                tabela2gdp %>% filter(Drzava == "Slovenia"))[,-c(2,3)]
 df1 <- gather(df, "tip", "vrednost", -Leto)
 
 primerjalni_graf_slo <- df1 %>%
@@ -46,7 +46,7 @@ primerjalni_graf_slo <- df1 %>%
 ########## PRIMERJAVA BDP IN DELOVNIH UR ZA EU ##########
 colnames(tabela2gdp)[3] <- "BDP"
 tab1 <- left_join(A1 %>% filter(Drzava == "European Union - 28 countries" & Spol == "Total"), 
-                A4 %>% filter(Drzava == "European Union - 28 countries"))[,-c(2,3)]
+                  tabela2gdp %>% filter(Drzava == "European Union - 28 countries"))[,-c(2,3)]
 tab2 <- gather(tab1, "tip", "vrednost", -Leto)
 
 primerjalni_graf_eu <- tab2 %>%
@@ -56,9 +56,9 @@ primerjalni_graf_eu <- tab2 %>%
 
 ########## PANOGE ########## primerju bom prve tri in zadne tri od SLO z EU, kot zanimivost se hrvaski/grski turizem z EU ali pa nemsko proizvodnjo z EU
 #1. samo Slovenija
-panoge <- ggplot(SLOTOP5, aes(x=Panoga, y=SteviloDelovnihUr)) + 
-  geom_bar(stat='identity', position='dodge') + ggtitle("SLO panoge") + 
-  xlab("") + ylab("SteviloDelovnihUr") 
+#panoge <- ggplot(SLOTOP5, aes(x=Panoga, y=SteviloDelovnihUr)) + 
+#  geom_bar(stat='identity', position='dodge') + ggtitle("SLO panoge") + 
+#  xlab("") + ylab("SteviloDelovnihUr") 
 
 #2. SLO + EU
 eu <- (A5 %>% filter(Drzava == "European Union - 28 countries", Leto == "2018"))[,-c(1,2)]
@@ -78,9 +78,9 @@ grafpanoge_top3 <- ggplot(skupna, aes(x=Panoga, y=Ure, fill=drzava)) + coord_car
 skupna2 <- left_join(SLOLOW3, eu, by = "Panoga")
 colnames(skupna2)[2] <- "Slovenija"
 skupna2 <- gather(skupna2, key = "drzava", value = "Ure", -Panoga)
-skupna2$Panoga[skupna$Panoga == 'Agriculture, forestry and fishing'] <- 'Kmetijstvo, gozdarstvo in ribolov'
-skupna2$Panoga[skupna$Panoga == 'Construction'] <- 'Gradbeništvo'
-skupna2$Panoga[skupna$Panoga == 'Transportation and storage'] <- 'Transport in shranjevanje'
+skupna2$Panoga[skupna2$Panoga == 'Arts, entertainment and recreation'] <- 'Umetnost, zabava in rekreacija'
+skupna2$Panoga[skupna2$Panoga == 'Accommodation and food service activities'] <- 'Nastanitvene in prehranske storitve'
+skupna2$Panoga[skupna2$Panoga == 'Administrative and support service activities'] <- 'Administrativne in podporne storitvene dejavnosti'
 grafpanoge_low3 <- ggplot(skupna2, aes(x=Panoga, y=Ure, fill=drzava)) + coord_cartesian(ylim = c(30, 40)) +
   geom_bar(stat='identity', position='dodge') + theme(axis.text.x = element_text(angle = 35, hjust = 1))
 
