@@ -6,11 +6,11 @@
 
 
 g_slo <- ggplot(data = A2, aes(x=Leto, y=SteviloDelovnihUr)) + 
-  geom_line() + ggtitle("Število delovnih ur po letih") +
+  geom_line() + ggtitle("Število delovnih ur v Slovenijipo letih ") +
   theme(panel.background=element_rect(fill="grey"))
 
 g_eu <- ggplot(data = A3, aes(x=Leto, y=SteviloDelovnihUr)) + 
-  geom_line() + ggtitle("Število delovnih ur po letih") + 
+  geom_line() + ggtitle("Število delovnih ur v Evropi po letih") + 
   theme(panel.background=element_rect(fill="grey"))
 
 g_drzave <- ggplot(data = A1, aes(x=Leto, y=SteviloDelovnihUr)) + 
@@ -37,19 +37,19 @@ df <- left_join(A1 %>% filter(Drzava == "Slovenia" & Spol == "Total"),
                 A4 %>% filter(Drzava == "Slovenia"))[,-c(2,3)]
 df1 <- gather(df, "tip", "vrednost", -Leto)
 
-grafek <- df1 %>%
+primerjalni_graf_slo <- df1 %>%
   ggplot(aes(x = Leto, y = vrednost, color = tip)) +
   geom_line() +
   facet_grid(tip ~ ., scales = "free_y")
 
 
 ########## PRIMERJAVA BDP IN DELOVNIH UR ZA EU ##########
-colnames(A4)[3] <- "BDP"
+colnames(tabela2gdp)[3] <- "BDP"
 tab1 <- left_join(A1 %>% filter(Drzava == "European Union - 28 countries" & Spol == "Total"), 
                 A4 %>% filter(Drzava == "European Union - 28 countries"))[,-c(2,3)]
 tab2 <- gather(tab1, "tip", "vrednost", -Leto)
 
-grafek2 <- tab2 %>%
+primerjalni_graf_eu <- tab2 %>%
   ggplot(aes(x = Leto, y = vrednost, color = tip)) +
   geom_line() +
   facet_grid(tip ~ ., scales = "free_y")
@@ -63,19 +63,26 @@ panoge <- ggplot(SLOTOP5, aes(x=Panoga, y=SteviloDelovnihUr)) +
 #2. SLO + EU
 eu <- (A5 %>% filter(Drzava == "European Union - 28 countries", Leto == "2018"))[,-c(1,2)]
 colnames(eu) <- c("Panoga", "EU")
-skupna <- left_join(SLOTOP5, eu, by = "Panoga")
-skupna1 <- left_join(SLOTOP5, eu, by = "Panoga")
+skupna <- left_join(SLOTOP3, eu, by = "Panoga")
+skupna1 <- left_join(SLOTOP3, eu, by = "Panoga")
 colnames(skupna)[2] <- "Slovenija"
-skupna <- gather(skupna, key = "drzava", value = "ure", -Panoga)
-grafpanoge <- ggplot(skupna, aes(x=Panoga, y=ure, fill=drzava)) + coord_cartesian(ylim = c(37.5, 42.5)) +
-  geom_bar(stat='identity', position='dodge') #+ theme(axis.text.x = element_text(angle = 45, hjust = 1))
+skupna <- gather(skupna, key = "drzava", value = "Ure", -Panoga)
+skupna$Panoga[skupna$Panoga == 'Agriculture, forestry and fishing'] <- 'Kmetijstvo, gozdarstvo in ribolov'
+skupna$Panoga[skupna$Panoga == 'Construction'] <- 'Gradbeništvo'
+skupna$Panoga[skupna$Panoga == 'Mining and quarrying'] <- 'Rudarstvo in kamnoseštvo'
+grafpanoge_top3 <- ggplot(skupna, aes(x=Panoga, y=Ure, fill=drzava)) + coord_cartesian(ylim = c(37.5, 42.5)) +
+  geom_bar(stat='identity', position='dodge') + theme(axis.text.x = element_text(angle = 35, hjust = 1))
 
-#rojstva_smrti <- ggplot(tabela_rojeni_umrli, aes(x=stanje, y=stevilo, fill=spol)) + 
-#  geom_bar(stat="identity") + facet_grid(~regija) +ggtitle("Rojstva in smrti") + 
-#  xlab("") + ylab("število") +
-#  theme(axis.text.x = element_text(angle = 90, hjust = 1))
-
-
+#eu2 <- (A5 %>% filter(Drzava == "European Union - 28 countries", Leto == "2018"))[,-c(1,2)]
+#colnames(eu2) <- c("Panoga", "EU")
+skupna2 <- left_join(SLOLOW3, eu, by = "Panoga")
+colnames(skupna2)[2] <- "Slovenija"
+skupna2 <- gather(skupna2, key = "drzava", value = "Ure", -Panoga)
+skupna2$Panoga[skupna$Panoga == 'Agriculture, forestry and fishing'] <- 'Kmetijstvo, gozdarstvo in ribolov'
+skupna2$Panoga[skupna$Panoga == 'Construction'] <- 'Gradbeništvo'
+skupna2$Panoga[skupna$Panoga == 'Transportation and storage'] <- 'Transport in shranjevanje'
+grafpanoge_low3 <- ggplot(skupna2, aes(x=Panoga, y=Ure, fill=drzava)) + coord_cartesian(ylim = c(30, 40)) +
+  geom_bar(stat='identity', position='dodge') + theme(axis.text.x = element_text(angle = 35, hjust = 1))
 
 ###################### ZEMLJEVIDI #####################
 data("World")
@@ -87,7 +94,7 @@ data("World")
 #1. BDP 2018
 zemljevid_evrope_BDP <- function(){
   evropa <- World %>% filter (continent == 'Europe')
-  BDP <- A4
+  BDP <- tabela2gdp
   BDP <- BDP %>% filter (Leto == 2018) %>% select('Drzava', 'BDP')
   podatki <- merge(y = BDP,x = evropa, by.x='name', by.y = 'Drzava')
   evropa <- tm_shape(podatki) + tm_polygons('BDP')
