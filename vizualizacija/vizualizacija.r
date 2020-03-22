@@ -118,6 +118,7 @@ zemljevid_evrope_delovne_ure_2009 <- function(){
 
 ########## RAZVRŠČANJE V SKUPINE ##########
 #library(tmaptools)
+
 razvrscanje <- function(){
   evropa1 <- World %>% filter (continent == 'Europe')
   names(evropa1)[3] <- 'Drzava'
@@ -139,6 +140,23 @@ razvrscanje <- function(){
                     xlim=c(-25, 35), ylim=c(32, 72), all.x=TRUE) + tm_polygons("skupina")
   return(slika)
 }
+
+########## NAPOVEDOVANJE PRIHODNOSTI ##########
+library(ggplot2)
+library(GGally)
+library(mgcv)
+
+a_delovne_ure <- A2 %>% select(Leto, SteviloDelovnihUr)
+prilagajanje <- lm(data = a_delovne_ure, SteviloDelovnihUr~I(Leto^2) +Leto + 0)
+gg <- data.frame(Leto = seq(2009, 2018, 1))
+napoved <- mutate(gg, NapovedanoSteviloDelovnihUr=predict(prilagajanje, gg))
+
+graf_regresije <- ggplot(a_delovne_ure, aes(x=Leto, y=SteviloDelovnihUr))+
+  geom_point() + geom_smooth(method = lm, formula =y~ x + I(x^2), fullrange = TRUE, color = 'green')+
+  geom_point(data = napoved, aes(x= Leto, y=NapovedanoSteviloDelovnihUr), color='red', size = 2) +
+  ggtitle('Napoved rasti stevila delovnih v Sloveniji')
+
+
 
 
 #library(tmaptools)
