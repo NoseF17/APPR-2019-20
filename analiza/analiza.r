@@ -34,8 +34,9 @@ razvrscanje <- function(){
                     xlim=c(-25, 35), ylim=c(32, 72), all.x=TRUE) + tm_polygons("skupina")
   return(slika)
 }
+razvrscanje <- razvrscanje()
 
-########## NAPOVEDOVANJE PRIHODNOSTI ##########
+########## NAPOVEDOVANJE ##########
 library(ggplot2)
 library(GGally)
 library(mgcv)

@@ -68,6 +68,9 @@ SLOLOW3 <- A5 %>% filter(Drzava == "Slovenia", Leto == "2018") %>%
   group_by(Panoga) %>% summarise(SteviloDelovnihUr) %>% arrange(desc(SteviloDelovnihUr)) %>%
   drop_na() %>% tail(4)
 SLOLOW3 <- SLOLOW3 %>% head(3)
+SLOTOP5 <- A5 %>% filter(Drzava == "Slovenia", Leto == "2018") %>%
+  group_by(Panoga) %>% summarise(SteviloDelovnihUr) %>% arrange(desc(SteviloDelovnihUr)) %>%
+  drop_na() %>% head(5)
 
 #3. NEMČIJA
 GERTOP5 <- A5 %>% filter(Drzava == "Germany", Leto == "2018") %>%

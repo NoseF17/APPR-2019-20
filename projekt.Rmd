@@ -26,9 +26,10 @@ source("lib/rstudio.r", encoding="UTF-8")
 
 # Izbira teme
 
-Za vzorec bomo prikazali nekaj podatkov o slovenskih občinah.
+Nekaj o temi.
+Analiziral bom število delovnih ur na teden po EU in jih primerjal po državah, evropsko povprečje pa bom tudi primerjal s Slovenijo. Ogledal si bom kako se je povprečna količina delovnih ur spreminjala v zadnjih 10 letih. Skušal bom ugotoviti, kako je razvitost države povezana s povprečjem delovnih ur, hkrati pa me bo zanimalo, v katerih panogah ljudje povprečno delajo največ in v katerih najmanj.
 
-![](slike/grb.png)
+![](slike/slika2.png)
 
 ***
 
@@ -75,33 +76,38 @@ Spodnji graf prikazuje tedenske delovne ure Slovenije in jih primerja z evropski
 print(graf2)
 ```
 
-Primerjava GDP-ja na prebivalca z stevilom delovnih ur za Slovenijo.
+Primerjava BDP-ja na prebivalca z stevilom delovnih ur za Slovenijo.
 ```{r primerjalni_graf_slo, echo=FALSE, message=FALSE, fig.align='center', warning = FALSE}
 print(primerjalni_graf_slo)
 ```
 
-Primerjava GDP-ja na prebivalca z stevilom delovnih ur za Evropo.
+Primerjava BDP-ja na prebivalca z stevilom delovnih ur za Evropo.
 ```{r primerjalni_graf_eu, echo=FALSE, message=FALSE, fig.align='center', warning = FALSE}
 print(primerjalni_graf_eu)
 ```
 
-Pri obeh opazimo da sta GDP in število delovnih ur obratno sorazmerna.
+Pri obeh grafih opazimo, da sta GDP in število delovnih ur obratno sorazmerna.
 
-
-Histogram, ki prikazuje 3 najbolj delavne panoge v Sloveniji, zraven pa še evropsko povprečje za primerjavo.
+Spodaj sta histograma, ki prikazujeta najbolj in najmanj delavne panoge v Sloveniji v letu 2018. Zraven sem za primerjavo dodal še evropsko povprečje.
 
 ```{r grafpanoge_top3, echo=FALSE, message=FALSE, fig.align='center', warning = FALSE}
 print(grafpanoge_top3)
 ```
 
-Histogram, ki prikazuje 3 najmanj delavne panoge v Sloveniji, zraven pa še evropsko povprečje za primerjavo.
 
 ```{r grafpanoge_low3, echo=FALSE, message=FALSE, fig.align='center', warning = FALSE}
 print(grafpanoge_low3)
 ```
 
-Spodnji zemljevid prikazuje povprečno velikost družine za vsako občino.
+Spodnji zemljevid prikazuje povprečno število delovnih ur za vsako državo v letu 2018.
+```{r zemljevid_evrope_delovne_ure_2018, echo=FALSE, message=FALSE, fig.align='center', warning = FALSE}
+zemljevid_evrope_delovne_ure_2018
+```
 
+Spodnji zemljevid prikazuje BDP na prebivalca za vsako državo v letu 2018.
+```{r zemljevid_evrope_BDP, echo=FALSE, message=FALSE, fig.align='center', warning = FALSE}
+zemljevid_evrope_BDP
+```
 
 
 ***
@@ -112,9 +118,19 @@ Spodnji zemljevid prikazuje povprečno velikost družine za vsako občino.
 source("analiza/analiza.r", encoding="UTF-8")
 ```
 
-Spodnji graf prikazuje povezavo med številom naselij in površino občine.
+Za leto 2018 sem evropske države glede na BDP, povprečno število delovnih ur in počutje državljanov razdelil v 5 skupin.
+
+```{r razvrscanje, echo=FALSE, fig.align='center', message=FALSE, fig.cap='Povezava med številom naselij in površino občine', warning = FALSE}
+razvrscanje
+```
 
 
+Pri napredni analizi sem si ogledal še napoved delovnih ur.
+
+```{r graf_regresije, echo=FALSE, message=FALSE, fig.align='center', warning = FALSE}
+print(graf_regresije)
+```
+Uporabil sem kvadratno regresijsko funkcijo, napoved pa predstavljajo rdeče pikice, ki so postavljene linearno. Predviden je še nadaljni upad delovnih ur.
 
 ***
 
