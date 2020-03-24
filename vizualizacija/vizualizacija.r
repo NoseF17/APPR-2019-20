@@ -1,10 +1,5 @@
 # 3. faza: Vizualizacija podatkov
 
-#A3$SteviloDelovnihUr <- parse_double(A3$SteviloDelovnihUr)
-#A2$SteviloDelovnihUr <- parse_double(A2$SteviloDelovnihUr)
-#A1$SteviloDelovnihUr <- parse_double(A1$SteviloDelovnihUr)
-
-
 g_slo <- ggplot(data = A2, aes(x=Leto, y=SteviloDelovnihUr)) + 
   geom_line() + ggtitle("Število delovnih ur v Slovenijipo letih ") +
   theme(panel.background=element_rect(fill="grey"))
@@ -74,8 +69,7 @@ grafpanoge_top3 <- ggplot(skupna, aes(x=Panoga, y=Ure, fill=drzava)) + coord_car
   geom_bar(stat='identity', position='dodge') + theme(axis.text.x = element_text(angle = 35, hjust = 1)) +
   ggtitle("Panoge z največjim povprečnim številom delovnih ur")
 
-#eu2 <- (A5 %>% filter(Drzava == "European Union - 28 countries", Leto == "2018"))[,-c(1,2)]
-#colnames(eu2) <- c("Panoga", "EU")
+
 skupna2 <- left_join(SLOLOW3, eu, by = "Panoga")
 colnames(skupna2)[2] <- "Slovenija"
 skupna2 <- gather(skupna2, key = "drzava", value = "Ure", -Panoga)
@@ -88,12 +82,8 @@ grafpanoge_low3 <- ggplot(skupna2, aes(x=Panoga, y=Ure, fill=drzava)) + coord_ca
 
 ###################### ZEMLJEVIDI #####################
 data("World")
-#svet<- tm_shape(World) +tm_polygons(border.col = "black")
-#evropskedrzave <- World%>%filter(continent == "Europe")
-#names(evropskedrzave)
-#z1 <- tm_shape(evropskedrzave) + tm_polygons(border.col = "black") + tm_legend(show=TRUE)
-
 #1. BDP 2018
+
 zemljevid_evrope_BDP <- function(){
   evropa <- World %>% filter (continent == 'Europe')
   BDP <- tabela2gdp
@@ -133,36 +123,3 @@ zemljevid_evrope_delovne_ure_2009 <- function(){
 }
 
 
-
-#library(tmaptools)
-#evropa1 <- World %>% filter (continent == 'Europe')
-#names(evropa1)[3] <- 'Drzava'
-#delure <- A1 %>% filter(Leto == 2018, Spol == "Total") %>% 
-#    select(Drzava, SteviloDelovnihUr)
-#bdp <- A4 %>% filter(Leto == 2018) %>%select(Drzava, BDP)
-#glavni1 <- inner_join(evropa1, delure, by = 'Drzava')
-#glavni2 <- inner_join(glavni1, bdp, by = 'Drzava')
-#podatki_cluster <- glavni2 %>% select('Drzava', 'SteviloDelovnihUr','BDP', 'pop_est','well_being')
-#st <- podatki_cluster$geometry
-#podatki_cluster$geometry <- NULL
-#podatki.norm <- podatki_cluster %>% select(-Drzava) %>% scale()
-#rownames(podatki.norm) <- podatki_cluster$Drzava
-#k <- kmeans(podatki.norm, 5, nstart=1000)
-#skupine <- data.frame(Drzava=podatki_cluster$Drzava, skupina=factor(k$cluster))
-#podatki_cluster <- cbind(podatki_cluster, st) 
-#t <- merge(podatki_cluster, skupine, by="Drzava")
-#t <- t[,c(7,6)]
-#zemljevid <- tm_shape(t %>% set_projection("latlong"),
-#                      xlim=c(-25, 35), ylim=c(32, 72)) + tm_polygons("skupina")
-
-# Uvozimo zemljevid.
-#zemljevid <- uvozi.zemljevid("http://baza.fmf.uni-lj.si/OB.zip", "OB",
-#                             pot.zemljevida="OB", encoding="Windows-1250")
-#levels(zemljevid$OB_UIME) <- levels(zemljevid$OB_UIME) %>%
-#  { gsub("Slovenskih", "Slov.", .) } %>% { gsub("-", " - ", .) }
-#zemljevid$OB_UIME <- factor(zemljevid$OB_UIME, levels=levels(obcine$obcina))
-#zemljevid <- fortify(zemljevid)
-
-# Izračunamo povprečno velikost družine
-#povprecja <- druzine %>% group_by(obcina) %>%
-#  summarise(povprecje=sum(velikost.druzine * stevilo.druzin) / sum(stevilo.druzin))

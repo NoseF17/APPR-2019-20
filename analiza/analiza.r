@@ -1,24 +1,13 @@
 # 4. faza: Analiza podatkov
 
-#podatki <- obcine %>% transmute(obcina, povrsina, gostota,
-                                #gostota.naselij=naselja/povrsina) %>%
-  #left_join(povprecja, by="obcina")
-#row.names(podatki) <- podatki$obcina
-#podatki$obcina <- NULL
-
-# Število skupin
-#n <- 5
-#skupine <- hclust(dist(scale(podatki))) %>% cutree(n)
-
 ########## RAZVRŠČANJE V SKUPINE ##########
-#library(tmaptools)
 
 razvrscanje <- function(){
   evropa1 <- World %>% filter (continent == 'Europe')
   names(evropa1)[3] <- 'Drzava'
   delure <- A1 %>% filter(Leto == 2018, Spol == "Total") %>% 
     select(Drzava, SteviloDelovnihUr)
-  delure$Drzava[delure$Drzava == "Czech Rep."] <- "Czech Republic" # ZAKAJ NE SPREMENI IMENA
+  delure$Drzava[delure$Drzava == "Czech Rep."] <- "Czech Republic"
   bdp <- tabela2gdp %>% filter(Leto == 2018) %>% 
     select(Drzava, BDP)
   glavni1 <- inner_join(evropa1, delure, by = 'Drzava')

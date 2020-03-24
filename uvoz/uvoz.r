@@ -10,20 +10,17 @@ tabela2gdp_celotna <- read_csv('podatki/tabela_GDP_per_capita_2008+.csv', na=':'
 
 tabela1_delovne_ure_moski_zenske <- read_csv('podatki/tabela_moski_zenske_2008+.csv', na=':', skip=1, col_names = c('Leto','Drzava','Spol','Zaposlenost','izbriši1','izbriši2','izbriši3', 'SteviloDelovnihUr', 'izbriši4'), locale= locale(encoding = 'CP1250')) %>%
   select(-'izbriši1',-'izbriši2',-'izbriši3',-'izbriši4')
-#tabela2panoge <- read_csv('podatki/tabela_po_panogah_2008+.csv', na=':', skip=1, col_names = c('Leto','Drzava','Spol','Zaposlenost', 'Status', 'Panoga', 'Enota', 'SteviloDelovnihUr', 'izbriši1'), locale= locale(encoding = 'CP1250')) %>%
-#  select(-'Spol',-'Status',-'izbriši1',-'Enota')
+
 tabela2gdp <- tabela2gdp_celotna %>% filter(Enota =="Current prices, euro per capita", 
                                             NA_ITEM == "Gross domestic product at market prices") %>% 
   select(Leto, Drzava, Vrednost)
 tabela2gdp$Drzava[tabela2gdp$Drzava == 'Germany (until 1990 former territory of the FRG)'] <- 'Germany'
 tabela2gdp$Drzava[tabela2gdp$Drzava == "Czechia"] <- "Czech Rep."
 
-#tabela4_delovne_ure_moski_zenske <- read_csv('podatki/tabela_moski_zenske_2008+.csv', na=':', skip=1, col_names = c('Leto','Drzava','Spol','Zaposlenost','izbriši1','izbriši2','izbriši3', 'SteviloDelovnihUr', 'izbriši4'), locale= locale(encoding = 'CP1250')) %>%
-#  select(-'izbriši1',-'izbriši2',-'izbriši3',-'izbriši4')
 tabela3panoge <-read_csv('podatki/tabela_po_panogah_nova_2008+.csv', na=':', skip=1, col_names = c('Leto','Drzava','Spol','Zaposlenost', 'Status', 'Panoga', 'Enota', 'SteviloDelovnihUr', 'izbriši1'), locale= locale(encoding = 'CP1250')) %>%
   select(-'Status',-'izbriši1',-'Enota', -'Zaposlenost')
 
-
+########################################################
 #Zanima me samo Totalni delovni čas - total
 A1 <- tabela1_delovne_ure_moski_zenske %>% filter(Zaposlenost=="Total") %>% 
   select(-Zaposlenost)
@@ -35,14 +32,6 @@ A2 <- A1 %>% filter(Drzava == "Slovenia", Spol == "Total") %>%
   select(Leto, Drzava, Spol, SteviloDelovnihUr)
 A3 <- A1 %>% filter(Drzava == "European Union - 28 countries", Spol == "Total") %>% 
   select(Leto, Drzava, Spol, SteviloDelovnihUr)
-
-
-########## GDP per capita ##########
-#tabela2gdp <- tabela2gdp_celotna %>% filter(Enota =="Current prices, euro per capita", 
-#                            NA_ITEM == "Gross domestic product at market prices") %>% 
-#  select(Leto, Drzava, Vrednost)
-#tabela2gdp$Drzava[A4$Drzava == 'Germany (until 1990 former territory of the FRG)'] <- 'Germany'
-#tabela2gdp$Drzava[A4$Drzava == "Czechia"] <- "Czech Rep."
 
 ########## PANOGE ##########
 A5 <- tabela3panoge %>% filter(Spol == "Total") %>% 
