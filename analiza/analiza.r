@@ -32,11 +32,11 @@ library(mgcv)
 
 a_delovne_ure <- A2 %>% select(Leto, SteviloDelovnihUr)
 prilagajanje <- lm(data = a_delovne_ure, SteviloDelovnihUr~I(Leto^2) +Leto + 0)
-gg <- data.frame(Leto = seq(2009, 2018, 1))
+gg <- data.frame(Leto = seq(2019, 2021, 1))
 napoved <- mutate(gg, NapovedanoSteviloDelovnihUr=predict(prilagajanje, gg))
 
 graf_regresije <- ggplot(a_delovne_ure, aes(x=Leto, y=SteviloDelovnihUr))+
   geom_point() + geom_smooth(method = lm, formula =y~ x + I(x^2), fullrange = TRUE, color = 'green')+
   geom_point(data = napoved, aes(x= Leto, y=NapovedanoSteviloDelovnihUr), color='red', size = 2) +
-  scale_x_continuous(breaks=seq(2009, 2020, 1)) +
+  scale_x_continuous(breaks=seq(2009, 2021, 1)) +
   ggtitle('Napoved rasti stevila delovnih v Sloveniji')
