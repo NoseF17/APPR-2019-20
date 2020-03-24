@@ -7,7 +7,6 @@ output:
     includes:
       in_header: lib/styles.sty
     latex_engine: xelatex
-runtime: shiny
 ---
 
 ```{r setup, echo=FALSE, results='hide', message=FALSE, warning=FALSE}
@@ -24,9 +23,8 @@ source("lib/libraries.r", encoding="UTF-8")
 source("lib/rstudio.r", encoding="UTF-8")
 ```
 
-# Izbira teme
+# Tema
 
-Nekaj o temi.
 Analiziral bom število delovnih ur na teden po EU in jih primerjal po državah, evropsko povprečje pa bom tudi primerjal s Slovenijo. Ogledal si bom kako se je povprečna količina delovnih ur spreminjala v zadnjih 10 letih. Skušal bom ugotoviti, kako je razvitost države povezana s povprečjem delovnih ur, hkrati pa me bo zanimalo, v katerih panogah ljudje povprečno delajo največ in v katerih najmanj.
 
 ![](slike/slika2.png)
@@ -39,7 +37,7 @@ Analiziral bom število delovnih ur na teden po EU in jih primerjal po državah,
 source("uvoz/uvoz.r", encoding="UTF-8")
 ```
 
-Uvozil sem podatke o občinah v obliki CSV iz Eurostata. Podatke imam v treh razpredelnicah v obliki *tidy data*.
+Podatke sem uvozil v obliki CSV iz Eurostata. Podatke imam v treh razpredelnicah v obliki *tidy data*.
 
 1. `tabela1_delovne_ure_moski_zenske` - podatki o številu delovnih ur za vsako državo po letih (ločeno po spolu in zaposlenosti)
   - `leto` - spremenljivka,
@@ -60,8 +58,6 @@ Uvozil sem podatke o občinah v obliki CSV iz Eurostata. Podatke imam v treh raz
   - `panoga` - spremenljivka: ime panoge (neurejen faktor),
   - `stevilo delovnih ur` - meritev: povprečno število tedenskih delovnih ur v določeni panogi (število).
 
- **Opomba**: da bi razpredelnica `obcine` res bila v obliki *tidy data*, bi morali odstraniti stolpec `gostota` (saj je izpeljan iz stolpcev `povrsina` in `prebivalci`), podatke o pokrajinah pa bi morali premakniti v drugo razpredelnico, saj nekatere občine pripadajo dvema pokrajinama. Podobno bi morali narediti tudi s stolpcem `odcepitev`.
-
 ***
 
 # Analiza in vizualizacija podatkov
@@ -75,18 +71,19 @@ Spodnji graf prikazuje tedenske delovne ure Slovenije in jih primerja z evropski
 ```{r graf2, echo=FALSE, message=FALSE, fig.align='center', warning = FALSE}
 print(graf2)
 ```
+Opazimo lahko, da smo kljub nihanjem nad evropskim povprečjem.
 
-Primerjava BDP-ja na prebivalca z stevilom delovnih ur za Slovenijo.
+Primerjava BDP-ja na prebivalca s številom delovnih ur za Slovenijo.
 ```{r primerjalni_graf_slo, echo=FALSE, message=FALSE, fig.align='center', warning = FALSE}
 print(primerjalni_graf_slo)
 ```
 
-Primerjava BDP-ja na prebivalca z stevilom delovnih ur za Evropo.
+Primerjava BDP-ja na prebivalca s številom delovnih ur za Evropo.
 ```{r primerjalni_graf_eu, echo=FALSE, message=FALSE, fig.align='center', warning = FALSE}
 print(primerjalni_graf_eu)
 ```
 
-Pri obeh grafih opazimo, da sta GDP in število delovnih ur obratno sorazmerna.
+Pri obeh grafih opazimo, da sta GDP in število delovnih ur obratno sorazmerna. Če BDP narašča, je ekonomija v dobrem stanju in država je bolj produktivna. Večja produktivnost pomeni, enako ali celo več opravljenega dela v krajšem času.
 
 Spodaj sta histograma, ki prikazujeta najbolj in najmanj delavne panoge v Sloveniji v letu 2018. Zraven sem za primerjavo dodal še evropsko povprečje.
 
@@ -98,23 +95,25 @@ print(grafpanoge_top3)
 ```{r grafpanoge_low3, echo=FALSE, message=FALSE, fig.align='center', warning = FALSE}
 print(grafpanoge_low3)
 ```
+"Najbolj delovne" panoge v Sloveniji so torej gradbeništvo, rudarstvo in pa kmetijstvo, gozdarstvo ter ribolov (Slednje spadajo v isto panogo). Zanimivo je, da v nekaterih od najbolj delovnih panogah vseeno ostajamo pod evropskim povprečjem, kljub temu da smo v povprečju vseh panog nad evropskim povprečjem (kot sem prikazal na prvem grafu). Če pogledamo tri "najmanj delovne" panoge, pa opazimo da je število delovnih ur precej večje od evropskega povprečja.
 
-Spodnji zemljevid prikazuje povprečno število delovnih ur za vsako državo v letu 2018.
+Poglejmo si še zemljevide.
+Prvi zemljevid prikazuje povprečno število delovnih ur za vsako državo v letu 2018.
 ```{r zemljevid_evrope_delovne_ure_2018, echo=FALSE, message=FALSE, fig.align='center', warning = FALSE}
 zemljevid_evrope_delovne_ure_2018
 ```
 
-Spodnji zemljevid prikazuje BDP na prebivalca za vsako državo v letu 2018.
+Drugi zemljevid prikazuje BDP na prebivalca za vsako državo v letu 2018.
 ```{r zemljevid_evrope_BDP, echo=FALSE, message=FALSE, fig.align='center', warning = FALSE}
 zemljevid_evrope_BDP
 ```
-
+Na zemljevidih je lepo razvidno, da je v večini držav BDP obratno sorazmeren s številom delovnih ur. Če za primer vzamem Italijo, je na prvem zemljevidu močno obarvana (veliko število delovnih ur), na drugem pa zelo svetla (majhen BDP). To izrazito prikazujejo tudi jugovzhodne in vzhodne države evropske unije.
 
 ***
 
 # Napredna analiza podatkov
 
-```{r analiza, echo=FALSE, message=FALSE}
+```{r analiza, echo=FALSE, message=FALSE, warning=FALSE}
 source("analiza/analiza.r", encoding="UTF-8")
 ```
 
@@ -123,17 +122,13 @@ Za leto 2018 sem evropske države glede na BDP, povprečno število delovnih ur 
 ```{r razvrscanje, echo=FALSE, fig.align='center', message=FALSE, fig.cap='Povezava med številom naselij in površino občine', warning = FALSE}
 razvrscanje
 ```
+Program je glede na dane podatke Slovenijo uvrstil v 2. skupino, in sicer še z Hrvaško, Madžarsko, Slovaško, Poljsko, Estonijo, Litvo, Latvijo, Romunijo, Bulgarijo, Črno goro, Portugalsko in pa Grčijo.
 
-
-Pri napredni analizi sem si ogledal še napoved delovnih ur.
+Pri napredni analizi sem si ogledal še napoved delovnih ur za Slovenijo.
 
 ```{r graf_regresije, echo=FALSE, message=FALSE, fig.align='center', warning = FALSE}
 print(graf_regresije)
 ```
-Uporabil sem kvadratno regresijsko funkcijo, napoved pa predstavljajo rdeče pikice, ki so postavljene linearno. Predviden je še nadaljni upad delovnih ur.
+Uporabil sem kvadratno regresijsko funkcijo, napoved pa predstavljajo rdeče pikice, ki so postavljene linearno. Predviden je še nadaljni upad delovnih ur. Enako lahko predpostavim tudi za Evropo.
 
 ***
-
-```{r shiny, echo=FALSE}
-shinyAppDir("shiny", options=list(width="100%", height=600))
-```

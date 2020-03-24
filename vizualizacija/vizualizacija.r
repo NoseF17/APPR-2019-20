@@ -28,8 +28,8 @@ graf1 <- ggplot(data = A1 %>% filter(Drzava %in% c("Slovenia", "European Union -
 #2. Slo in EU total, izrisano s črto.
 graf2 <- ggplot(data = A1 %>% filter(Drzava %in% c("Slovenia", "European Union - 28 countries"), Spol %in% "Total"),
                aes(x=Leto, y=SteviloDelovnihUr, color = Drzava)) + 
-  geom_line() + ggtitle("Število delovnih ur po letih") + 
-  theme(panel.background=element_rect(fill="grey"))
+  geom_line() + ggtitle("Število delovnih ur po letih")# + 
+  #theme(panel.background=element_rect(fill="grey"))
 
 ########## PRIMERJAVA BDP IN DELOVNIH UR ZA SLO ##########
 colnames(tabela2gdp)[3] <- "BDP"
